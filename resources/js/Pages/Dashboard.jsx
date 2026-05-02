@@ -1,17 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Sidebar } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/custom/app-sidebar";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Dashboard({ ...props }) {
-    console.log(props.name);
-
     return (
-        <>
-            <Sidebar>
-                <h2 className="text-2xl text-emerald-800">
-                    Hallo {props.name}
-                </h2>
-                <Button>Text</Button>
-            </Sidebar>
-        </>
+        <SidebarProvider>
+            <AppSidebar headline="T3Lingu" />
+            <SidebarInset>
+                <header className="flex h-12 items-center gap-2 px-4 border-b">
+                    <SidebarTrigger />
+                </header>
+                <main>
+
+                </main>
+            </SidebarInset>
+        </SidebarProvider>
     );
 }
