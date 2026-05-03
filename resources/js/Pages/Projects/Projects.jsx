@@ -1,11 +1,11 @@
 import SidebarLayout from "@/Layouts/SidebarLayout";
-import { DashboardContent } from "@/app/DashboardContent";
+import { ProjectsContent } from "@/app/ProjectsContent";
 
 export default function Dashboard({ ...data }) {
     return (
         <SidebarLayout>
             <main>
-                <DashboardContent data={data} />
+                <ProjectsContent data={data} />
             </main>
         </SidebarLayout>
     );

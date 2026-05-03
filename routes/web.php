@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Models\ProjectExtensions;
+use App\Http\Controllers\ContentController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Project;
 use Nette\Utils\DateTime;
 
-Route::get("/", [DashboardController::class, "dashboard"]);
+Route::get("/", [ContentController::class, "dashboard"]);
+
+Route::get("/projects", [ContentController::class, "projects"]);
 
 Route::get("/new/{name}", function (string $name) {
     $project = Project::create([

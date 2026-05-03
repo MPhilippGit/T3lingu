@@ -7,7 +7,7 @@ use App\Models\ProjectExtensions;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class DashboardController extends Controller
+class ContentController extends Controller
 {
     private array $data = [];
 
@@ -28,5 +28,24 @@ class DashboardController extends Controller
         $this->data = Controller::appendRoutes($this->data);
 
         return Inertia::render("Dashboard", $this->data);
+    }
+
+    public function projects(): Response
+    {
+        $projects = Project::all()
+            ->select("name", "id", "version")
+            ->sortBy("updated_at");
+
+        foreach ($projects as $project) {
+            $extensions = ProjectExtensions::all()
+                ->where("project_id", $project["id"])
+                ->toArray();
+            $project["extensions"] = $extensions;
+            $this->data["projects"][] = $project;
+        }
+
+        $this->data = Controller::appendRoutes($this->data);
+
+        return Inertia::render("Projects/Projects", $this->data);
     }
 }

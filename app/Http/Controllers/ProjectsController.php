@@ -7,11 +7,11 @@ use App\Models\ProjectExtensions;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class DashboardController extends Controller
+class ProjectsController extends Controller
 {
     private array $data = [];
 
-    public function dashboard(): Response
+    public function projects(): Response
     {
         $projects = Project::all()
             ->select("name", "id", "version")
