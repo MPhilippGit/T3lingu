@@ -25,6 +25,8 @@ class DashboardController extends Controller
             $this->data[] = $project;
         }
 
+        $this->data = Controller::appendRoutes($this->data);
+
         return Inertia::render("Dashboard", $this->data);
     }
 }
