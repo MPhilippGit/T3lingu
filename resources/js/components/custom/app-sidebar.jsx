@@ -5,14 +5,12 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarHeader,
-    SidebarMenuBadge
+    SidebarMenuBadge,
 } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
 
-export function AppSidebar({...props}) {
-
+export function AppSidebar({ ...props }) {
     return (
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible="icon" className={"bg-amber-300"}>
             <SidebarHeader>
                 <div className="flex justify-center">
                     <Earth className="size-12 stroke-emerald-700 text-emerald-700" />
@@ -20,11 +18,10 @@ export function AppSidebar({...props}) {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup />
-                    {props.children}
+                {props.children}
             </SidebarContent>
             <SidebarFooter />
             <SidebarMenuBadge />
-            <NavUser className="self-end justify-end" />
         </Sidebar>
     );
 }

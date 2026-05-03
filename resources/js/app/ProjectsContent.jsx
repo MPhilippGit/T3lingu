@@ -1,48 +1,67 @@
-import { ContentLayout } from "@/Layouts/ContentLayout";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Link2 } from "lucide-react";
-import { Extensions } from "./Partials/Extensions";
+    Table,
+    TableHeader,
+    TableCaption,
+    TableRow,
+    TableBody,
+    TableCell,
+    TableHead,
+} from "@/components/ui/table";
+import { Pencil, SquareX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Edit } from "./Dialogs/Edit";
 
-export function ProjectsContent({ data }) {
-    const projects = data.projects.map((project, idx) => {
-        return (
-            <AccordionItem key={idx} value={String(idx)}>
-                <AccordionTrigger className="flex items-center justify-between">
-                    <span>{project.name}</span>
-                    <Button variant="ghost">
-                        <a
-                            href={`/projects/${project.id}`}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Link2 />
-                        </a>
-                    </Button>
-                </AccordionTrigger>
-                <AccordionContent>
-                    <Extensions extensions={project.extensions} />
-                </AccordionContent>
-            </AccordionItem>
-        );
-    });
+export function ProjectsContentTable({ data }) {
+    function ProjectTableHead({ projects }) {
+        const projectHeader = projects.map((project, idx) => (
+            <TableHead key={idx}>{Object.keys(project)[idx]}</TableHead>
+        ));
+        return <>{projectHeader}</>;
+    }
+
+    function ProjectCells({ project }) {
+        const projectCells = Object.values(project).map((value, idx) => {
+            if (value instanceof Array)
+                return <TableCell key={idx}></TableCell>;
+            const content = String(value);
+            return <TableCell key={idx}>{content}</TableCell>;
+        });
+        return <>{projectCells}</>;
+    }
+
+    function ProjectRows({ projects }) {
+        const projectRows = projects.map((project, idx) => (
+            <TableRow key={idx}>
+                <ProjectCells project={project} />
+                <TableCell>
+                    <div className="flex gap-4 text-black/70">
+                        <Button variant="outline">
+                            <Pencil />
+                        </Button>
+                        <Button variant="outline">
+                            <SquareX size={16} />
+                        </Button>
+                        <Edit />
+                    </div>
+                </TableCell>
+            </TableRow>
+        ));
+
+        return <>{projectRows}</>;
+    }
 
     return (
-        <ContentLayout data={data}>
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-                    <div className="aspect-video rounded-xl bg-emerald-700/30 py-4 px-12">
-                        <h2 className="text-2xl mb-4">Projekte</h2>
-                        <Accordion type="single" collapsible>
-                            {projects}
-                        </Accordion>
-                    </div>
-                </div>
-            </div>
-        </ContentLayout>
+        <Table className={"bg-emerald-900/30"}>
+            <TableCaption>List of Projects</TableCaption>
+            <TableHeader>
+                <TableRow>
+                    <ProjectTableHead projects={data.projects} />
+                    <TableCell>Controls</TableCell>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <ProjectRows projects={data.projects} />
+            </TableBody>
+        </Table>
     );
 }
