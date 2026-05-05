@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProjectExtensions;
+use App\Models\ProjectExtension;
 use Illuminate\Http\Request;
 
 class ProjectExtensionsController extends Controller
 {
+    public static array $EXTENSION_SCHEMA = ["name", "project_id"];
     /**
      * Display a listing of the resource.
+     * @return array
      */
-    public function index()
+    public function get(string $projectId)
     {
-        //
+        $extensions = ProjectExtension::query()
+            ->select(self::$EXTENSION_SCHEMA)
+            ->where("project_id", $projectId);
+
+        if (count($extensions)) {
+            return [];
+        }
+
+        return $extensions->toArray();
     }
 
     /**
@@ -50,8 +60,10 @@ class ProjectExtensionsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProjectExtensions $projectExtensions)
-    {
+    public function update(
+        Request $request,
+        ProjectExtensions $projectExtensions,
+    ) {
         //
     }
 

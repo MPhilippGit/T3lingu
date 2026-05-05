@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Models\ProjectExtensions;
+use App\Models\ProjectExtension;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,7 +20,7 @@ class ContentController extends Controller
             ->sortBy("updated_at");
 
         foreach ($projects as $project) {
-            $extensions = ProjectExtensions::all()
+            $extensions = ProjectExtension::all()
                 ->where("project_id", $project["id"])
                 ->toArray();
             $project["extensions"] = $extensions;

@@ -19,7 +19,6 @@ return new class extends Migration {
                 ->on("tx_projects")
                 ->onDelete("cascade");
             $table->string("name", 255);
-            $table->dateTime("last_updated");
         });
     }
 
