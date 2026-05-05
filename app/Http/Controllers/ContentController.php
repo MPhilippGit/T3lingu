@@ -39,17 +39,11 @@ class ContentController extends Controller
             ->sortBy("updated_at");
 
         foreach ($projects as $project) {
-            $extensions = ProjectExtensions::all()
-                ->where("project_id", $project["id"])
-                ->toArray();
-            $project["extensions"] = $extensions;
             $this->data["projects"][] = $project;
         }
 
         $this->data = Controller::appendRoutes($this->data);
-        $this->data["schema"] = array_merge(self::$PROJECT_SCHEMA, [
-            "extensions",
-        ]);
+        $this->data["schema"] = self::$PROJECT_SCHEMA;
 
         return Inertia::render("Projects/Projects", $this->data);
     }

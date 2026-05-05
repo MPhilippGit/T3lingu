@@ -7,10 +7,12 @@ import {
     TableCell,
     TableHead,
 } from "@/components/ui/table";
-import { SquareX } from "lucide-react";
+import { Pencil, SquareX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Edit } from "./Dialogs/Edit";
 import { ContentLayout } from "@/Layouts/ContentLayout";
+import { EditProject } from "./Dialogs/EditProject";
+import { DeleteProject } from "./Dialogs/Delete";
 
 export function ProjectsContentTable({ data }) {
     function ProjectTableHead({ schema }) {
@@ -36,10 +38,10 @@ export function ProjectsContentTable({ data }) {
                 <ProjectCells project={project} />
                 <TableCell>
                     <div className="flex gap-4 text-black/70">
-                        <Edit />
-                        <Button variant="outline">
-                            <SquareX size={16} />
-                        </Button>
+                        <EditProject>
+                            <Pencil size={16} />
+                        </EditProject>
+                        <DeleteProject />
                     </div>
                 </TableCell>
             </TableRow>
