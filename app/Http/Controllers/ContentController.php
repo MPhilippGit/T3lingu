@@ -11,6 +11,8 @@ class ContentController extends Controller
 {
     private array $data = [];
 
+    public static array $PROJECT_SCHEMA = ["id", "name", "version"];
+
     public function dashboard(): Response
     {
         $projects = Project::all()
@@ -33,7 +35,7 @@ class ContentController extends Controller
     public function projects(): Response
     {
         $projects = Project::all()
-            ->select("name", "id", "version")
+            ->select(...self::$PROJECT_SCHEMA)
             ->sortBy("updated_at");
 
         foreach ($projects as $project) {
@@ -45,6 +47,9 @@ class ContentController extends Controller
         }
 
         $this->data = Controller::appendRoutes($this->data);
+        $this->data["schema"] = array_merge(self::$PROJECT_SCHEMA, [
+            "extensions",
+        ]);
 
         return Inertia::render("Projects/Projects", $this->data);
     }

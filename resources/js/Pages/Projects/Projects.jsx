@@ -5,9 +5,7 @@ export default function Dashboard({ ...data }) {
     return (
         <SidebarLayout>
             <main>
-                <div className="grid auto-cols-min md:grid-cols-3">
-                    <ProjectsContentTable data={data} />
-                </div>
+                <ProjectsContentTable data={data} />
             </main>
         </SidebarLayout>
     );

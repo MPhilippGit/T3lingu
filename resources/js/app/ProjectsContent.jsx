@@ -7,16 +7,17 @@ import {
     TableCell,
     TableHead,
 } from "@/components/ui/table";
-import { Pencil, SquareX } from "lucide-react";
+import { SquareX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Edit } from "./Dialogs/Edit";
+import { ContentLayout } from "@/Layouts/ContentLayout";
 
 export function ProjectsContentTable({ data }) {
-    function ProjectTableHead({ projects }) {
-        const projectHeader = projects.map((project, idx) => (
-            <TableHead key={idx}>{Object.keys(project)[idx]}</TableHead>
+    function ProjectTableHead({ schema }) {
+        const tablehead = schema.map((value, idx) => (
+            <TableCell key={idx}>{value}</TableCell>
         ));
-        return <>{projectHeader}</>;
+        return <>{tablehead}</>;
     }
 
     function ProjectCells({ project }) {
@@ -35,13 +36,10 @@ export function ProjectsContentTable({ data }) {
                 <ProjectCells project={project} />
                 <TableCell>
                     <div className="flex gap-4 text-black/70">
-                        <Button variant="outline">
-                            <Pencil />
-                        </Button>
+                        <Edit />
                         <Button variant="outline">
                             <SquareX size={16} />
                         </Button>
-                        <Edit />
                     </div>
                 </TableCell>
             </TableRow>
@@ -51,17 +49,19 @@ export function ProjectsContentTable({ data }) {
     }
 
     return (
-        <Table className={"bg-emerald-900/30"}>
-            <TableCaption>List of Projects</TableCaption>
-            <TableHeader>
-                <TableRow>
-                    <ProjectTableHead projects={data.projects} />
-                    <TableCell>Controls</TableCell>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                <ProjectRows projects={data.projects} />
-            </TableBody>
-        </Table>
+        <ContentLayout data={data}>
+            <Table>
+                <TableCaption>List of Projects</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <ProjectTableHead schema={data.schema} />
+                        <TableCell>Controls</TableCell>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <ProjectRows projects={data.projects} />
+                </TableBody>
+            </Table>
+        </ContentLayout>
     );
 }
