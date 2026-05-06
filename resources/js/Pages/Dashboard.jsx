@@ -1,12 +1,10 @@
 import SidebarLayout from "@/Layouts/SidebarLayout";
-import { DashboardContent } from "@/app/DashboardContent";
+import { Main } from "@/app/organisms/Main";
 
 export default function Dashboard({ ...data }) {
     return (
         <SidebarLayout>
-            <main>
-                <DashboardContent data={data} />
-            </main>
+            <Main data={data} />
         </SidebarLayout>
     );
 }

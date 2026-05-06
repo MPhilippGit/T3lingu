@@ -1,12 +1,11 @@
 import SidebarLayout from "@/Layouts/SidebarLayout";
-import { ProjectsContentTable } from "@/app/ProjectsContent";
+import { ProjectTable } from "@/app/organisms/Index";
 
 export default function Dashboard({ ...data }) {
+    console.log(data);
     return (
         <SidebarLayout>
-            <main>
-                <ProjectsContentTable data={data} />
-            </main>
+            <ProjectTable data={data} />
         </SidebarLayout>
     );
 }

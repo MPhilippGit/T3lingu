@@ -2,7 +2,7 @@ import { ContentLayout } from "@/Layouts/ContentLayout";
 import { Button } from "@/components/ui/button";
 import { FileCode, DownloadIcon } from "lucide-react";
 
-export function DashboardContent({ data }) {
+export function Main({ data }) {
     return (
         <ContentLayout data={data}>
             <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

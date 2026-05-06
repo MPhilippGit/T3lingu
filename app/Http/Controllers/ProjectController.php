@@ -67,20 +67,16 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function single(string $projectId)
+    public function single(string $projectId): Response
     {
         //
-        $project = Project::query()
-            ->select(...self::$PROJECT_SCHEMA)
-            ->where("id", $projectId)
-            ->get();
-        $extensions = ProjectExtension::query()
-            ->select(...self::$EXTENSION_SCHEMA)
-            ->where("project_id", $projectId)
-            ->get();
+        $project = Project::find($projectId);
+
+        $extensions = $project->extensions;
 
         $this->data["project"] = $project;
-        $this->data["extensions"] = $extensions;
+        $this->data["extensions"] = $extensions ?? [];
+        $this->data = ContentController::appendRoutes($this->data);
 
         return Inertia::render("Projects/Project", $this->data);
     }

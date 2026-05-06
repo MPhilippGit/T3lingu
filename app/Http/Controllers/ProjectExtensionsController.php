@@ -10,19 +10,20 @@ class ProjectExtensionsController extends Controller
     public static array $EXTENSION_SCHEMA = ["name", "project_id"];
     /**
      * Display a listing of the resource.
-     * @return array
+     * @return Illuminate\Support\Collection
      */
     public function get(string $projectId)
     {
         $extensions = ProjectExtension::query()
             ->select(self::$EXTENSION_SCHEMA)
-            ->where("project_id", $projectId);
+            ->where("project_id", $projectId)
+            ->find();
 
         if (count($extensions)) {
             return [];
         }
 
-        return $extensions->toArray();
+        return $extensions;
     }
 
     /**
