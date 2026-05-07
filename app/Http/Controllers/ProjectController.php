@@ -29,10 +29,7 @@ class ProjectController extends Controller
             $this->data["projects"][] = $project;
         }
 
-        $this->data = self::appendRoutes($this->data);
-        $this->data["schema"] = self::$PROJECT_SCHEMA;
-        $this->data = self::appendRoutes($this->data);
-
+        dd($project);
         return Inertia::render("Projects/Projects", $this->data);
     }
     /**

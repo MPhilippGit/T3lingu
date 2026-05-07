@@ -9,4 +9,9 @@ class Translation extends Model
 {
     /** @use HasFactory<\Database\Factories\TranslationFactory> */
     use HasFactory;
+
+    public function xlfUnit()
+    {
+        return $this->belongsTo(XlfUnit::class);
+    }
 }

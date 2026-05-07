@@ -21,6 +21,7 @@ return new class extends Migration {
                 ->onDelete("cascade");
             $table->string("locale");
             $table->boolean("is_translated");
+            $table->enum("translated_by", ["AI", "DeepL", "Customer", "Other"]);
         });
     }
 

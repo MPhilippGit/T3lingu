@@ -9,4 +9,14 @@ class XlfUnit extends Model
 {
     /** @use HasFactory<\Database\Factories\XlfUnitFactory> */
     use HasFactory;
+
+    public function translations()
+    {
+        return $this->hasMany(Translation::class);
+    }
+
+    public function xlfFile()
+    {
+        return $this->belongsTo(XlfFile::class);
+    }
 }

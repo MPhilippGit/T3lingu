@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Translation;
+use App\Models\XlfUnit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,10 @@ class TranslationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "locale" => fake()->locale(),
+            "translated_by" => "DeepL",
+            "xlf_unit_id" => XlfUnit::factory(),
+            "is_translated" => fake()->boolean(),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\XlfFile;
 use App\Models\XlfUnit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +19,10 @@ class XlfUnitFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "xlf_file_id" => XlfFile::factory(),
+            "unit_key" =>
+                fake()->word() . "." . fake()->word() . "." . fake()->word(),
+            "source" => fake()->sentence(),
         ];
     }
 }
