@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Project;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,16 +11,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create("tx_language_sources", function (Blueprint $table) {
+        Schema::create("extensions", function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("language_id")->unique(true);
-            $table->string("filename");
-            $table->text("source");
+            $table->string("name");
             $table
-                ->foreignId("project_extension_id")
+                ->foreignIdFor(Project::class)
                 ->references("id")
-                ->on("tx_project_extensions")
+                ->on("projects")
                 ->onDelete("cascade");
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists("tx_language_sources");
+        Schema::dropIfExists("extensions");
     }
 };

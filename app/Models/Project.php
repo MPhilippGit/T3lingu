@@ -3,13 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ProjectExtension;
 
-#[Table("tx_projects")]
 #[Fillable(["name", "version", "gitlab_url"])]
 class Project extends Model
 {
@@ -21,6 +18,6 @@ class Project extends Model
      */
     public function extensions(): HasMany
     {
-        return $this->hasMany(ProjectExtension::class);
+        return $this->hasMany(Extension::class);
     }
 }

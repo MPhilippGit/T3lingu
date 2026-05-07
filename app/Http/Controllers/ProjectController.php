@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LanguageSource;
 use App\Models\Project;
 use Exception;
 use Inertia\Response;
@@ -37,6 +36,22 @@ class ProjectController extends Controller
         return Inertia::render("Projects/Projects", $this->data);
     }
     /**
+     * Display the specified resource.
+     */
+    public function single(string $projectId): Response
+    {
+        $projects = Project::all();
+        $project = $projects->findOrFail($projectId);
+
+        $extensions = $project->extensions;
+
+        $this->data["project"] = $project;
+        $this->data["extensions"] = $extensions ?? [];
+        $this->data = Controller::appendRoutes($this->data);
+
+        return Inertia::render("Projects/Project", $this->data);
+    }
+    /**
      * Deletes a model instance of a project
      */
     public function delete(Request $request, string $id): RedirectResponse
@@ -66,28 +81,6 @@ class ProjectController extends Controller
     {
         //
         return;
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function single(string $projectId): Response
-    {
-        //
-        $project = Project::find($projectId);
-
-        $extensions = $project->extensions;
-
-        foreach ($extensions as $extension) {
-            $sources = $extension->languageSources;
-            $this->data["sources"] = $sources;
-        }
-
-        $this->data["project"] = $project;
-        $this->data["extensions"] = $extensions ?? [];
-        $this->data = Controller::appendRoutes($this->data);
-
-        return Inertia::render("Projects/Project", $this->data);
     }
 
     /**

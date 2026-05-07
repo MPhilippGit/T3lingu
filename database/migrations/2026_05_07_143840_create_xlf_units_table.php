@@ -1,21 +1,23 @@
 <?php
 
+use App\Models\XlfFile;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create("projects", function (Blueprint $table) {
-            $table->id()->autoIncrement();
+        Schema::create('xlf_units', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
-            $table->string("name", 255);
-            $table->string("version", 255)->nullable();
-            $table->string("gitlab_url", 255)->nullable();
+            $table->string('unit_key');
+            $table->text('source');
+            $table->foreignIdFor(XlfFile::class)
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists("projects");
+        Schema::dropIfExists('xlf_units');
     }
 };

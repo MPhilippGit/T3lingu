@@ -5,6 +5,7 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table";
+import EmptyExtensions from "../molecules/Dialogs/Empty";
 
 function Head({ schema }) {
     const tablehead = schema.map((value, idx) => (
@@ -22,6 +23,7 @@ function Row({ ...cells }) {
 }
 
 export function LanguageTable({ data, schema }) {
+    if (data === undefined) return <EmptyExtensions />;
     const tableContent = Object.values(data);
     const entries = tableContent.map((row, idx) => {
         const { id, source, language_id } = row;
