@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/select";
 import { ContentLayout } from "@/Layouts/ContentLayout";
 import EmptyExtensions from "../molecules/Dialogs/Empty";
+import { LanguageTable } from "./IndexTable";
 
 function ExtensionSelection({ extensions }) {
-    console.log(extensions);
     const selectItems = extensions.map((item, idx) => {
         return (
             <SelectItem key={idx} value={item.id}>
@@ -39,9 +39,15 @@ export default function DetailView({ data }) {
     return (
         <ContentLayout data={data}>
             {data.extensions.length ? (
-                <section className="px-4 flex gap-4">
-                    <h2 className="text-2xl">{data.project.name}</h2>
-                    <ExtensionSelection extensions={data.extensions} />
+                <section className="px-4 gap-4">
+                    <div className="flex space-x-4">
+                        <h2 className="text-2xl">{data.project.name}</h2>
+                        <ExtensionSelection extensions={data.extensions} />
+                    </div>
+                    <LanguageTable
+                        schema={["id", "language_id", "source"]}
+                        data={data.sources}
+                    />
                 </section>
             ) : (
                 <section className="px-4">

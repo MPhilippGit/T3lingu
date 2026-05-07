@@ -8,29 +8,14 @@ import {
     BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 
-export function AppBreadcrumb({ ...data }) {
-    const breadcrumbPages = new Array();
-
-    Object.entries(data.pages).forEach((page) => {
-        breadcrumbPages.push(page);
-    });
-
-    const breadcrumbs = breadcrumbPages.map((page, idx) => {
-        const isLast = idx === breadcrumbPages.length - 1;
-
-        return (
-            <React.Fragment key={idx}>
-                <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href={page[0]}>{page[1]}</BreadcrumbLink>
-                </BreadcrumbItem>
-                {!isLast && <BreadcrumbSeparator />}
-            </React.Fragment>
-        );
-    });
-
+export function AppBreadcrumb({ routes }) {
     return (
         <Breadcrumb>
-            <BreadcrumbList>{breadcrumbs}</BreadcrumbList>
+            <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                    <BreadcrumbLink>Hardgecodete Scheiße</BreadcrumbLink>
+                </BreadcrumbItem>
+            </BreadcrumbList>
         </Breadcrumb>
     );
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LanguageSource;
 use App\Models\Project;
-use App\Models\ProjectExtension;
 use Exception;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -16,14 +16,15 @@ class ProjectController extends Controller
 
     public static array $PROJECT_SCHEMA = ["id", "name", "version"];
     public static array $EXTENSION_SCHEMA = ["id", "name", "project_id"];
+    public static array $SOURCE_SCHEMA = ["id", "language_id", "source"];
     /**
      * Renders the list view of all projects
      */
     public function index(): Response
     {
         $projects = Project::all()
-            ->select(...self::$PROJECT_SCHEMA)
-            ->sortBy("updated_at");
+            ->select(self::$PROJECT_SCHEMA)
+            ->sortBy("name");
 
         foreach ($projects as $project) {
             $this->data["projects"][] = $project;
@@ -31,6 +32,7 @@ class ProjectController extends Controller
 
         $this->data = self::appendRoutes($this->data);
         $this->data["schema"] = self::$PROJECT_SCHEMA;
+        $this->data = self::appendRoutes($this->data);
 
         return Inertia::render("Projects/Projects", $this->data);
     }
@@ -44,24 +46,26 @@ class ProjectController extends Controller
             $project->delete();
             return redirect("/projects");
         } catch (Exception $e) {
-            return redirect("/projects");
+            return abort(404);
         }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
+        return;
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         //
+        return;
     }
 
     /**
@@ -74,9 +78,14 @@ class ProjectController extends Controller
 
         $extensions = $project->extensions;
 
+        foreach ($extensions as $extension) {
+            $sources = $extension->languageSources;
+            $this->data["sources"] = $sources;
+        }
+
         $this->data["project"] = $project;
         $this->data["extensions"] = $extensions ?? [];
-        $this->data = ContentController::appendRoutes($this->data);
+        $this->data = Controller::appendRoutes($this->data);
 
         return Inertia::render("Projects/Project", $this->data);
     }
@@ -84,24 +93,27 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(Project $project): void
     {
         //
+        return;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, Project $project): void
     {
         //
+        return;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(Project $project): void
     {
         //
+        return;
     }
 }

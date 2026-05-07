@@ -21,7 +21,7 @@ class ProjectFactory extends Factory
     {
         return [
             "name" => fake()->company(),
-            "version" => fake()->buildingNumber(),
+            "version" => random_int(10, 14),
             "gitlab_url" => fake()->domainName(),
         ];
     }

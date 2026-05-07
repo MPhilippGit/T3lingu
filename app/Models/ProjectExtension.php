@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Table("tx_project_extensions")]
 #[Fillable(["name", "last_updated", "project_id"])]
@@ -23,5 +24,13 @@ class ProjectExtension extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * returns the corresponding
+     */
+    public function languageSources(): HasMany
+    {
+        return $this->hasMany(LanguageSource::class);
     }
 }
