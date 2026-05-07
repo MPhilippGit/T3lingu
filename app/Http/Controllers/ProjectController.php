@@ -29,24 +29,27 @@ class ProjectController extends Controller
             $this->data["projects"][] = $project;
         }
 
-        dd($project);
-        return Inertia::render("Projects/Projects", $this->data);
+        return Inertia::render("Projects/Projects", [
+            "projects" => $projects,
+            "schema" => self::$PROJECT_SCHEMA,
+            "breadcrumb" => ["Dashboard", "Projects"],
+        ]);
     }
     /**
      * Display the specified resource.
      */
     public function single(string $projectId): Response
     {
-        $projects = Project::all();
-        $project = $projects->findOrFail($projectId);
+        $project = Project::all()->findOrFail($projectId);
+        $data = $project->only(self::$EXTENSION_SCHEMA);
+        $extensions = $project->extensions ?? [];
 
-        $extensions = $project->extensions;
-
-        $this->data["project"] = $project;
-        $this->data["extensions"] = $extensions ?? [];
-        $this->data = Controller::appendRoutes($this->data);
-
-        return Inertia::render("Projects/Project", $this->data);
+        return Inertia::render("Projects/Project", [
+            "project" => $data,
+            "extensions" => $extensions,
+            "schema" => self::$EXTENSION_SCHEMA,
+            "breadcrumb" => ["Dashboard", "Projects", $project->name],
+        ]);
     }
     /**
      * Deletes a model instance of a project

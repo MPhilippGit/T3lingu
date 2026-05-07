@@ -49,24 +49,18 @@ function ProjectRows({ projects, schema }) {
     return <>{projectRows}</>;
 }
 
-export function ProjectTable({ data }) {
+export function ProjectTable({ projects, schema }) {
     return (
-        <ContentLayout data={data}>
-            <Table>
-                <TableCaption>List of Projects</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <ProjectTableHead schema={data.schema} />
-                        <TableCell>Controls</TableCell>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <ProjectRows
-                        projects={data.projects}
-                        schema={data.schema}
-                    />
-                </TableBody>
-            </Table>
-        </ContentLayout>
+        <Table>
+            <TableCaption>List of Projects</TableCaption>
+            <TableHeader>
+                <TableRow>
+                    <ProjectTableHead schema={schema} />
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <ProjectRows projects={projects} schema={schema} />
+            </TableBody>
+        </Table>
     );
 }

@@ -8,14 +8,25 @@ import {
     BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 
-export function AppBreadcrumb({ routes }) {
+export function AppBreadcrumb({ breadcrumb }) {
+    const list =
+        breadcrumb instanceof Array &&
+        breadcrumb.map((entry, idx) => {
+            return (
+                <React.Fragment key={idx}>
+                    <BreadcrumbItem className="hidden md:block">
+                        <BreadcrumbLink href={"/" + entry.toLowerCase()}>
+                            {entry}
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    {idx !== breadcrumb.length - 1 && <BreadcrumbSeparator />}
+                </React.Fragment>
+            );
+        });
+
     return (
         <Breadcrumb>
-            <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink>Hardgecodete Scheiße</BreadcrumbLink>
-                </BreadcrumbItem>
-            </BreadcrumbList>
+            <BreadcrumbList>{list}</BreadcrumbList>
         </Breadcrumb>
     );
 }

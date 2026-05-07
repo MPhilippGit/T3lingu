@@ -35,26 +35,22 @@ function ExtensionSelection({ extensions }) {
     );
 }
 
-export default function DetailView({ data }) {
+export default function DetailView({ project, extensions }) {
     return (
-        <ContentLayout data={data}>
-            {data.extensions.length ? (
+        <>
+            {extensions.length ? (
                 <section className="px-4 gap-4">
                     <div className="flex space-x-4">
-                        <h2 className="text-2xl">{data.project.name}</h2>
-                        <ExtensionSelection extensions={data.extensions} />
+                        <h2 className="text-2xl">{project.name}</h2>
+                        <ExtensionSelection extensions={extensions} />
                     </div>
-                    <LanguageTable
-                        schema={["id", "language_id", "source"]}
-                        data={data.sources}
-                    />
                 </section>
             ) : (
                 <section className="px-4">
-                    <h2 className="text-2xl">{data.project.name}</h2>
+                    <h2 className="text-2xl">{project.name}</h2>
                     <EmptyExtensions />
                 </section>
             )}
-        </ContentLayout>
+        </>
     );
 }
