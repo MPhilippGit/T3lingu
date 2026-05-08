@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use Exception;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,23 +10,19 @@ use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
-    private array $data = [];
-
     public static array $PROJECT_SCHEMA = ["id", "name", "version"];
     public static array $EXTENSION_SCHEMA = ["id", "name", "project_id"];
-    public static array $SOURCE_SCHEMA = ["id", "language_id", "source"];
-    /**
-     * Renders the list view of all projects
-     */
+    public static array $FILE_SCHEMA = [
+        "extension_id",
+        "filename",
+        "source_locale",
+    ];
+
     public function index(): Response
     {
-        $projects = Project::all()
-            ->select(self::$PROJECT_SCHEMA)
-            ->sortBy("name");
-
-        foreach ($projects as $project) {
-            $this->data["projects"][] = $project;
-        }
+        $projects = Project::select(self::$PROJECT_SCHEMA)
+            ->orderBy("name")
+            ->get();
 
         return Inertia::render("Projects/Projects", [
             "projects" => $projects,
@@ -40,29 +35,24 @@ class ProjectController extends Controller
      */
     public function single(string $projectId): Response
     {
-        $project = Project::all()->findOrFail($projectId);
-        $data = $project->only(self::$EXTENSION_SCHEMA);
-        $extensions = $project->extensions ?? [];
+        $project = Project::with("extensions.xlfFiles")->findOrFail($projectId);
+
+        $extensions = $project->extensions->map(fn($ext) => [
+            ...$ext->only(self::$EXTENSION_SCHEMA),
+            "xlfFiles" => $ext->xlfFiles->map(fn($f) => $f->only(self::$FILE_SCHEMA)),
+        ]);
 
         return Inertia::render("Projects/Project", [
-            "project" => $data,
+            "project" => $project->only(self::$PROJECT_SCHEMA),
             "extensions" => $extensions,
             "schema" => self::$EXTENSION_SCHEMA,
             "breadcrumb" => ["Dashboard", "Projects", $project->name],
         ]);
     }
-    /**
-     * Deletes a model instance of a project
-     */
     public function delete(Request $request, string $id): RedirectResponse
     {
-        try {
-            $project = Project::all()->findOrFail($id);
-            $project->delete();
-            return redirect("/projects");
-        } catch (Exception $e) {
-            return abort(404);
-        }
+        Project::findOrFail($id)->delete();
+        return redirect("/projects");
     }
 
     /**
