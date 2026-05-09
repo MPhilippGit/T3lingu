@@ -58,6 +58,7 @@ class ProjectController extends Controller
             "breadcrumb" => ["Dashboard", "Projects", $project->name],
         ]);
     }
+
     public function delete(Request $request, string $id): RedirectResponse
     {
         Project::findOrFail($id)->delete();

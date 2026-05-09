@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/select";
 import { ContentLayout } from "@/Layouts/ContentLayout";
 import EmptyExtensions from "../molecules/Dialogs/Empty";
-import { LanguageTable } from "./IndexTable";
 import { useState } from "react";
+import { Link } from "@inertiajs/react";
 
 function ExtensionSelection({ extensions, selectedExt, setExt }) {
     const selectItems = extensions.map((item, idx) => {
@@ -36,21 +36,22 @@ function ExtensionSelection({ extensions, selectedExt, setExt }) {
     );
 }
 
-function FileSelection({ files }) {
-    const selectItems =
-        files instanceof Array ??
-        files.map((item, idx) => {
-            return (
-                <SelectItem key={idx} value={item.id}>
-                    {item.filename}
-                </SelectItem>
-            );
-        });
+function FileSelection({ files, selectedFile }) {
+    if (files.length === 0) return <EmptyExtensions />;
+    console.log(files[selectedFile].filename);
+
+    const selectItems = files.map((item, idx) => {
+        return (
+            <SelectItem key={idx} value={item.id}>
+                {item.filename}
+            </SelectItem>
+        );
+    });
 
     return (
         <Select onValueChange={(e) => setFile(e - 1)}>
             <SelectTrigger className="w-full max-w-48">
-                <SelectValue placeholder={files[0].filename} />
+                <SelectValue value={selectedFile} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
@@ -77,15 +78,15 @@ export default function Detail({ project, extensions, schema }) {
                             selectedExt={selectedExt}
                             extensions={extensions}
                         />
-                        <FileSelection
-                            selectedExt={selectedExt}
-                            selectedFile={selectedFile}
-                            setFile={setFile}
-                            files={extensions[selectedExt].xlfFiles}
-                        />
+                        {extensions[selectedExt].xlfFiles && (
+                            <FileSelection
+                                selectedExt={selectedExt}
+                                selectedFile={selectedFile}
+                                setFile={setFile}
+                                files={extensions[selectedExt].xlfFiles}
+                            />
+                        )}
                     </div>
-                    <p>{selectedExt}</p>
-                    <p>{selectedFile}</p>
                 </section>
             ) : (
                 <section className="px-4">
