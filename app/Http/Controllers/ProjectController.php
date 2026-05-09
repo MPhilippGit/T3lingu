@@ -18,6 +18,11 @@ class ProjectController extends Controller
         "source_locale",
     ];
 
+    public function dashboard(): string
+    {
+        return "Hi";
+    }
+
     public function index(): Response
     {
         $projects = Project::select(self::$PROJECT_SCHEMA)
@@ -37,10 +42,14 @@ class ProjectController extends Controller
     {
         $project = Project::with("extensions.xlfFiles")->findOrFail($projectId);
 
-        $extensions = $project->extensions->map(fn($ext) => [
-            ...$ext->only(self::$EXTENSION_SCHEMA),
-            "xlfFiles" => $ext->xlfFiles->map(fn($f) => $f->only(self::$FILE_SCHEMA)),
-        ]);
+        $extensions = $project->extensions->map(
+            fn($ext) => [
+                ...$ext->only(self::$EXTENSION_SCHEMA),
+                "xlfFiles" => $ext->xlfFiles->map(
+                    fn($f) => $f->only(self::$FILE_SCHEMA),
+                ),
+            ],
+        );
 
         return Inertia::render("Projects/Project", [
             "project" => $project->only(self::$PROJECT_SCHEMA),
