@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\XlfFile;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,27 +19,18 @@ class ProjectController extends Controller
         "source_locale",
     ];
 
-    public function dashboard(): string
-    {
-        return "Hi";
-    }
-
     public function index(): Response
     {
-        $projects = Project::select(self::$PROJECT_SCHEMA)
-            ->orderBy("name")
-            ->get();
-
-        return Inertia::render("Projects/Projects", [
+        $projects = Project::sortAll("name");
+        return Inertia::render("ProjectList", [
             "projects" => $projects,
-            "schema" => self::$PROJECT_SCHEMA,
             "breadcrumb" => ["Dashboard", "Projects"],
         ]);
     }
     /**
      * Display the specified resource.
      */
-    public function single(string $projectId): Response
+    public function show(Request $request, string $projectId): Response
     {
         $project = Project::with("extensions.xlfFiles")->findOrFail($projectId);
 
@@ -51,26 +43,31 @@ class ProjectController extends Controller
             ],
         );
 
-        return Inertia::render("Projects/Project", [
+        return Inertia::render("ProjectDetail", [
             "project" => $project->only(self::$PROJECT_SCHEMA),
             "extensions" => $extensions,
-            "schema" => self::$EXTENSION_SCHEMA,
-            "breadcrumb" => ["Dashboard", "Projects", $project->name],
+            "file" => Inertia::optional(
+                fn() => XlfFile::where(
+                    "extension_id",
+                    $request["extension"],
+                )->first(),
+            ),
         ]);
     }
 
     public function delete(Request $request, string $id): RedirectResponse
     {
-        Project::findOrFail($id)->delete();
+        $project = Project::all()->findOrFail($id);
+        $project->delete();
         return redirect("/projects");
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): void
+    public function create(Project $project): void
     {
-        //
+        dd($project);
         return;
     }
 
