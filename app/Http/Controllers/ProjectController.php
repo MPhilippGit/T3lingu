@@ -30,7 +30,7 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $projectId): Response
+    public function show(Project $projectId): Response
     {
         $project = Project::with("extensions.xlfFiles")->findOrFail($projectId);
 
@@ -55,29 +55,22 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function delete(Request $request, string $id): RedirectResponse
+    public function delete(Project $project): RedirectResponse
     {
-        $project = Project::all()->findOrFail($id);
         $project->delete();
         return redirect("/projects");
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Project $project): void
-    {
-        dd($project);
-        return;
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): void
+    public function store(Request $request): Project
     {
-        //
-        return;
+        $project = new Project();
+        $project->name = $request->name;
+        $project->version = $request->version;
+        $project->gitlab_url = $request->gitlab_url;
+        return redirect("/project");
     }
 
     /**

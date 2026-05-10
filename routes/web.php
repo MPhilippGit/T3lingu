@@ -6,4 +6,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/", [DashboardController::class, "home"])->name("home");
 
-Route::resource("project", ProjectController::class);
+Route::resource("project", ProjectController::class, [
+    "except" => ["create"],
+]);
