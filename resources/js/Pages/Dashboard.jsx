@@ -1,19 +1,23 @@
+import BasicLayout from "@/Layouts/Basic";
 import SidebarLayout from "@/Layouts/SidebarLayout";
 import { Main } from "@/app/organisms/Main";
 import { Link, usePage } from "@inertiajs/react";
 
 export default function Dashboard({ ...data }) {
-    console.log(data);
-
-    const { flash } = usePage();
-
-    console.log(flash);
+    const { content } = usePage().props;
+    console.log(data.content, "pageprop");
+    console.log(content, "usepage");
 
     return (
-        <>
-            <h2>Hallo, {data.name}</h2>
-            <Link href="/flash">Flash</Link>
-            {flash}
-        </>
+        <BasicLayout>
+            <h2>{data.user.name}</h2>
+            <Link
+                href={"?extensionId=1"}
+                only={["content"]}
+                className="text-2xl text-blue-700 cursor-pointer"
+            >
+                let me in
+            </Link>
+        </BasicLayout>
     );
 }

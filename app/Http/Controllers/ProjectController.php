@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use Exception;
+use App\Models\XlfFile;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,76 +11,66 @@ use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
-    private array $data = [];
-
     public static array $PROJECT_SCHEMA = ["id", "name", "version"];
     public static array $EXTENSION_SCHEMA = ["id", "name", "project_id"];
-    public static array $SOURCE_SCHEMA = ["id", "language_id", "source"];
-    /**
-     * Renders the list view of all projects
-     */
+    public static array $FILE_SCHEMA = [
+        "extension_id",
+        "filename",
+        "source_locale",
+    ];
+
     public function index(): Response
     {
-        $projects = Project::all()
-            ->select(self::$PROJECT_SCHEMA)
-            ->sortBy("name");
-
-        foreach ($projects as $project) {
-            $this->data["projects"][] = $project;
-        }
-
-        return Inertia::render("Projects/Projects", [
+        $projects = Project::sortAll("name");
+        return Inertia::render("ProjectList", [
             "projects" => $projects,
-            "schema" => self::$PROJECT_SCHEMA,
             "breadcrumb" => ["Dashboard", "Projects"],
         ]);
     }
     /**
      * Display the specified resource.
      */
-    public function single(string $projectId): Response
+    public function show(Project $projectId): Response
     {
-        $project = Project::all()->findOrFail($projectId);
-        $data = $project->only(self::$EXTENSION_SCHEMA);
-        $extensions = $project->extensions ?? [];
+        $project = Project::with("extensions.xlfFiles")->findOrFail($projectId);
 
-        return Inertia::render("Projects/Project", [
-            "project" => $data,
+        $extensions = $project->extensions->map(
+            fn($ext) => [
+                ...$ext->only(self::$EXTENSION_SCHEMA),
+                "xlfFiles" => $ext->xlfFiles->map(
+                    fn($f) => $f->only(self::$FILE_SCHEMA),
+                ),
+            ],
+        );
+
+        return Inertia::render("ProjectDetail", [
+            "project" => $project->only(self::$PROJECT_SCHEMA),
             "extensions" => $extensions,
-            "schema" => self::$EXTENSION_SCHEMA,
-            "breadcrumb" => ["Dashboard", "Projects", $project->name],
+            "file" => Inertia::optional(
+                fn() => XlfFile::where(
+                    "extension_id",
+                    $request["extension"],
+                )->first(),
+            ),
         ]);
     }
-    /**
-     * Deletes a model instance of a project
-     */
-    public function delete(Request $request, string $id): RedirectResponse
-    {
-        try {
-            $project = Project::all()->findOrFail($id);
-            $project->delete();
-            return redirect("/projects");
-        } catch (Exception $e) {
-            return abort(404);
-        }
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): void
+    public function delete(Project $project): RedirectResponse
     {
-        //
-        return;
+        $project->delete();
+        return redirect("/projects");
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): void
+    public function store(Request $request): Project
     {
-        //
-        return;
+        $project = new Project();
+        $project->name = $request->name;
+        $project->version = $request->version;
+        $project->gitlab_url = $request->gitlab_url;
+        return redirect("/project");
     }
 
     /**

@@ -36,12 +36,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
-            // Synchronously...
-            "appName" => "horst schlämmer",
-
-            // Lazily...
-            "projects" => fn() => Project::all(),
-        ]);
+        return [...parent::share($request)];
     }
 }

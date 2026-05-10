@@ -2,32 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Response;
+use App\Models\Extension;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
     //
-    public function home(Request $request): Response
+    public function home(): Response
     {
-        if ($request->query->has("data")) {
-            $optional = "Leck eier";
-        }
-        $name = "Horst";
-
         return Inertia::render("Dashboard", [
-            "name" => $name,
-            "optional" => Inertia::optional(fn() => $optional),
+            "user.name" => "Muschuu",
+            "content" => Inertia::optional(fn() => Extension::all()),
         ]);
-    }
-
-    public function flash()
-    {
-        Inertia::flash([
-            "optional" => "User created!",
-        ]);
-
-        return back();
     }
 }
